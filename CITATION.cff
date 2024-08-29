@@ -1,0 +1,84 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+# MMB COMMENT: MUST BE UPDATED!
+
+cff-version: 1.2.0
+title: Tutorials for Membrane Review
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Miguel
+    family-names: Amaral
+    email: miguel.amaral@ista.ac.at
+    affiliation: ISTA
+  - given-names: Adam
+    family-names: Prada
+    email: adam.prada@ista.ac.at
+    affiliation: ISTA
+  - given-names: Maitane
+    family-names: Munoz-Basagoiti
+    email: maitane.munoz-basagoiti@ista.ac.at
+    affiliation: ISTA
+  - given-names: Felix
+    family-names: Frey
+    email: felix.frey@ista.ac.at
+    affiliation: ISTA
+  - given-names: Billie
+    family-names: Meadowcroft
+    email: billie.meadowcroft@ista.ac.at
+    affiliation: ISTA
+  - given-names: Andela
+    family-names: Saric
+    email: andela.saric@ista.ac.at
+    affiliation: ISTA
+repository-code: 'https://github.com/Saric-Group/MembraneReviewTutorials'
+abstract: >-
+  All biological cells are defined by a plasma membrane that
+  protects the interior of the cell from the extracellular
+  environment. This membrane is frequently deformed across
+  different scales in various cellular processes. Due to the
+  relevance of the topic, the study of membranes and
+  membrane deformations is a long-standing area of research
+  in biophysics and soft matter, using both experimental and
+  theoretical approaches. Various approaches are used for
+  modeling membranes and membrane deformations. Analytical
+  and numerical modeling has greatly advanced our knowledge
+  of simplified or reconstituted systems. In addition,
+  computer simulations with varying degrees of detail are
+  used. 
+
+  Such simulations have the advantage that they can also be
+  applied to highly complex biological problems. They are
+  therefore a suitable tool for investigating membranes that
+  interact with passive or active molecular structures.
+  While it is undisputed that computational modeling is a
+  very powerful approach, in practice it comes with many
+  difficulties and complications. In particular, beginners
+  and non-experts may struggle with the basic understanding
+  of the simulation models, making it difficult to develop
+  meaningful models. This is partially due to the extension
+  period of time over which this field has developed, but
+  also because of the requirement of two very different
+  expertise to develop and apply such simulations:
+  theoretical statistical physics and programming. With this
+  review, we aim to introduce the non-expert reader to
+  non-specific-lipid coarse-grained membrane simulations at
+  the mesoscale using a three-step protocol. First, we
+  provide a short but concise overview of the computational
+  approaches to study fluid membranes as a starting point
+  from which readers are directed to more specialized
+  references. Second, we provide a conceptual guide on how
+  to develop coarse-grained membrane simulations. And third,
+  we construct a hands on tutorial on how to apply mesoscale
+  membrane simulations. Specifically, our focus is on a
+  comparison of different models and a pedagogical
+  examination of them in terms of what these models can
+  achieve and how resource-intensive they are. To ease the
+  non-expert reader's venture into the field, we provide a
+  GitHub repository with ready-to-run tutorials/code to
+  simulate the different models.
+keywords:
+  - simulation
+  - membrane
