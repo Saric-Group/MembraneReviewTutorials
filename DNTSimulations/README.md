@@ -2,9 +2,20 @@
 
 ## 1. Generate initial configurations
 
-Running a TriLMP simulation involves 3 stages:
+To measure the force required to extrude a membrane tether, we will first run a single, long simulation. In this simulation, the membrane is initialized as a flat patch with $L \approx 100\sigma$ with fixed boundary conditions in the $z =0$ plane. Additionally, we attach a bead to one of the vertices in our DTN using a harmonic bond. We then move the bead with constant velocity along $z>0$ while membrane dynamics are integrated, which gives rise to a membrane tether. This simulation procedure generates a series of system checkpoints or configurations that will be used in the second stage of our analysis, where for a fixed bead position, we let the membrane relax.
 
-### A. Create the TriLmp object. 
+### 1.1. Running the simulation
+To run the simulation, go to the [`part1_generatetrajectory`](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations/part1_generatetrajectory) directory. You can run the simulation directly by using:
+
+```python launch_trajectory.py```
+
+We additionally provide a bash script that allows you to submit the simulation into an HPC cluster.
+
+### 1.2. A first contact with TriLMP
+
+This first simulation allows you to understand the basic structure of TriLMP. Indeed, running a TriLMP simulation involves 3 stages, which we detail below.
+
+**A. Create the TriLmp object**
 This step initializes the simulation set-up. 
 
 Here you define:
@@ -18,7 +29,7 @@ Here you define:
 - The length of the equilibration stage
 - The frequency at which performance, system info is outputted and checkpoints are created by TriLMP
   
-### B. Add LAMMPS commands to the simulation
+**B. Add LAMMPS commands to the simulation**
  Here you can choose to pass as many LAMMPS commands as desired to your simulation.
  
  Note that there are some compulsory commands (see pair_styles or time-integration sections below)
@@ -28,7 +39,7 @@ Here you define:
 - *Pre-equilibration commands*: Pass them directly to the TriLmp object before the simulation has started running (this is useful to equilibrate your system beforehand)
 - *Post-equilibration commands*: Pass them by appending them to the postequilibration_commands list below (they will be run once the pre-equilibration stage has ended, in order)
   
-### C. Run 
+**C. Run**
 Run the simulation by calling the TriLmp.run(args) method with its corresponding arguments.
 
 ## 2. Equilibrate the membrane
