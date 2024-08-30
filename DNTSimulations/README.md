@@ -1,4 +1,6 @@
-# Tether extrusion with a Dynamically Triangulated Network (DTN)
+# Tether extrusion with a Dynamically Triangulated Network
+
+Generating the force-extrusion profile shown in OurReviewEtAl., (2024) requires two steps in the analysis, which are detailed below. All the codes necessary to generate the data are provided. These have been tested and thoroughly commented with the goal of teaching the simulator that follows the tutorial the basic functioning of the [TriLMP software](https://github.com/Saric-Group/trimem_sbeady). At the end of the tutorial, the simulator will be able to simulate Dynamically Triangulated Networks (DTNs) using TriLMP.
 
 ## 1. Generate initial configurations
 
@@ -42,4 +44,4 @@ Here you define:
 **C. Run**
 Run the simulation by calling the TriLmp.run(args) method with its corresponding arguments.
 
-## 2. Equilibrate the membrane
+## 2. Equilibrate the membrane from generated configurations
