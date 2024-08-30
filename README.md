@@ -18,7 +18,7 @@ Please add info needed to understand and run your tutorial(s).
 Please add info needed to understand and run your tutorial(s).
 
 ### 3. Dynamically triangulated membrane model: TriLMP  <a name="trilmp"></a>
-We use TriLMP to simulate a fluid membrane using a Dynamically Triangulated Network (DTN). TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022]. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [DNTSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations) to run the tutorials of this section.
+We choose TriLMP to simulate a fluid membrane using a Dynamically Triangulated Network (DTN). TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022] developed within the Saric Group at ISTA. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [DNTSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations) to run the tutorials of this section.
 
 ## Reporting bugs and feedback  <a name="bugs"></a>
 
