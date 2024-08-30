@@ -1,6 +1,6 @@
 # Tether extrusion with a Dynamically Triangulated Network
 
-Generating the force-extrusion profile shown in OurReviewEtAl., (2024) requires two steps in the analysis, which are detailed below. All the codes necessary to generate the data are provided. These have been tested and thoroughly commented with the goal of teaching the simulator that follows the tutorial the basic functioning of the [TriLMP software](https://github.com/Saric-Group/trimem_sbeady). At the end of the tutorial, the simulator will be able to simulate Dynamically Triangulated Networks (DTNs) using TriLMP.
+Generating the force-extrusion profile shown in OurReviewEtAl., (2024) requires two steps in the analysis, which are detailed below. All the codes necessary to generate the data are provided. These have been tested and thoroughly commented with the goal of teaching the reader the basic functioning of the [TriLMP software](https://github.com/Saric-Group/trimem_sbeady). At the end of the tutorial, the reader will be able to simulate Dynamically Triangulated Networks (DTNs) using TriLMP.
 
 ## 1. Generate initial configurations
 
@@ -11,7 +11,7 @@ To run the simulation, go to the [`part1_generatetrajectory`](https://github.com
 
 ```python launch_trajectory.py```
 
-We additionally provide a bash script that allows you to submit the simulation into an HPC cluster.
+We additionally provide a bash script that allows you to submit the simulation into an HPC cluster. 
 
 ### 1.2. A first contact with TriLMP
 
@@ -48,3 +48,11 @@ Run the simulation by calling the TriLmp.run(args) method with its corresponding
 Once the first stage of our analysis has concluded and we have generated enough configurations, we use those configurations as new starting points. Our goal now is to let the system relax in order to measure the equilibrium force that the membrane exerts on the pulling bead, for different bead positions $z = z_i$. For each initial configuration, the membrane will reach a certain maximum elongation and exert a certain force on the pulling bead. It is these observables that we use to generate the force-elongation profile in OurReviewEtAl., (2024). 
 
 From the computational point of view, the only challenge in this section is to load the (pickled) checkpoints we have created. This can be easily done through the `read_checkpoint(args)` function in TriLMP. While the basic structure of a TriLMP program (see above) is not explicit anymore, it still holds, and the three stages can be easily recognised. Additionally, the LAMMPS commands that we have used for the first part are also recycled here. The difference now is that the pulling bead, which before was mobile, remains static.
+
+### 2.1. Running the simulation
+Given a checkpoint file, to run its equilibration go to the [part2_configequilibration](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations/part2_configequilibration) directory. You can run the simulation directly by using:
+
+```python launch_configequil.py```
+
+Note that to obtain the full force-elongation profile you will need to equilibrate the system at many different configurations (many different elongations).
+
