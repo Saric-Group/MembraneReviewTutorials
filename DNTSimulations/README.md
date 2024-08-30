@@ -1,2 +1,2 @@
-# Tutorial: Tether extrusion with a Dynamically Triangulated Network (DTN)
+# Tether extrusion with a Dynamically Triangulated Network (DTN)
 
