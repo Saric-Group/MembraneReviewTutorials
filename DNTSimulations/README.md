@@ -45,3 +45,6 @@ Here you define:
 Run the simulation by calling the TriLmp.run(args) method with its corresponding arguments.
 
 ## 2. Equilibrate the membrane from generated configurations
+Once the first stage of our analysis has concluded and we have generated enough configurations, we use those configurations as new starting points. Our goal now is to let the system relax in order to measure the equilibrium force that the membrane exerts on the pulling bead, for different bead positions $z = z_i$. For each initial configuration, the membrane will reach a certain maximum elongation and exert a certain force on the pulling bead. It is these observables that we use to generate the force-elongation profile in OurReviewEtAl., (2024). 
+
+From the computational point of view, the only challenge in this section is to load the (pickled) checkpoints we have created. This can be easily done through the `read_checkpoint(args)` function in TriLMP. While the basic structure of a TriLMP program (see above) is not explicit anymore, it still holds, and the three stages can be easily recognised. Additionally, the LAMMPS commands that we have used for the first part are also recycled here. The difference now is that the pulling bead, which before was mobile, remains static.
