@@ -1,0 +1,14 @@
+channels:
+  - https://conda.ovito.org
+  - conda-forge
+dependencies:
+  - lammps
+  - numpy
+  - scipy
+  - matplotlib
+  - xarray
+  - pandas
+  - numba
+  - uncertainties
+  - tqdm
+  - conda.ovito.org:ovito

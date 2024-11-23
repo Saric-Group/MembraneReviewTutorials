@@ -1,0 +1,27 @@
+# Cooke lipid
+# header section:
+3 atoms
+2 bonds
+1 angles
+
+# body section:
+Coords
+
+1   0   0   1    # Head bead
+2   0   0   0    # First tail bead
+3   0   0   -1   # Second tail bead
+
+Types
+
+1 1 # H
+2 2 # T
+3 2 # T
+
+Bonds # id type a b
+
+1 1 1 2
+2 1 2 3
+
+Angles # id type a b c
+
+1 1 1 2 3

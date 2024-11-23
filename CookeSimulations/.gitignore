@@ -1,0 +1,5 @@
+topo.data
+log.lammps
+spectrum.csv
+*.nc
+__pycache__/
