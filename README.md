@@ -12,7 +12,7 @@ This repository contains ready-to-run tutorials on the simulation tests presente
 ## Tutorials <a name="tutorials"></a>
 
 ### 1. Three-beads-per-lipid membrane: Cooke model <a name="cooke"></a>
-Please add info needed to understand and run your tutorial(s).
+[See respective folder](CookeSimulations).
 
 ### 2. One-particle thick fluid membrane: YLZ model <a name="ylz"></a>
 Please add info needed to understand and run your tutorial(s).
