@@ -1,28 +1,22 @@
+# Usage:
+# lmp -var seed 1 -var halfL 30 -in -var duration 1000. -in in.lmp
+# seed : seed for thermostat and initial velocities
+# halfL : half of the length of the simulation box
+# duration : simulation duration in simulation time units \tau 
+
 # parallelize in xy
 processors * * 1
        
 units      lj
 
 # define simulation box 
-variable halfL equal 12 #EDIT HERE
 region box block -${halfL} ${halfL} -${halfL} ${halfL} -${halfL} ${halfL}
 boundary   p p p
 
-# define Cooke lipid
+# prepare for cooke lipid
 atom_style angle
 create_box 2 box  bond/types 1 angle/types 1 extra/bond/per/atom 3 extra/angle/per/atom 3 extra/special/per/atom 3
 mass * 1.0
-molecule lipid lipid.txt
-
-# build bilayer
-lattice custom 1. a1 1 0 0 a2 0 1 0 a3 0 0 1 origin 0 0 0. basis 0.5 0.5 0.5
-region upper_leaflet block EDGE EDGE EDGE EDGE 1.5 1.5 units box
-create_atoms 0 region upper_leaflet mol lipid 1 rotate 0 1 0 0
-region lower_leaflet block EDGE EDGE EDGE EDGE -1.5 -1.5
-create_atoms 0 region lower_leaflet mol lipid 1 rotate 180 1 0 0
-
-# write topology file for latter visualization
-write_data topo.data
 
 # setup conservative neighbor lists
 neighbor 1. bin
@@ -47,10 +41,22 @@ pair_coeff 2 2 1. ${two6} ${tt_rc} wca
 bond_coeff 1 30.0 1.5 1.0 1.0
 angle_coeff 1 5.0 180.0
 
+# define Cooke lipid
+molecule lipid lipid.txt
+
+# build bilayer
+lattice custom 1. a1 1 0 0 a2 0 1 0 a3 0 0 1 origin 0 0 0. basis 0.5 0.5 0.5
+region upper_leaflet block EDGE EDGE EDGE EDGE 1.5 1.5 units box
+create_atoms 0 region upper_leaflet mol lipid 1 rotate 0 1 0 0
+region lower_leaflet block EDGE EDGE EDGE EDGE -1.5 -1.5
+create_atoms 0 region lower_leaflet mol lipid 1 rotate 180 1 0 0
+
+# write topology file for latter visualization
+write_data topo.data
+
 # define ensemble
 
 variable temperature equal 1.0
-variable seed equal 1
 
 fix langevin all langevin ${temperature} ${temperature} 1.0 ${seed} zero yes
 fix fNPH all nph x 0. 0. 10. y 0. 0. 10. couple xy dilate all
@@ -59,7 +65,6 @@ fix fNPH all nph x 0. 0. 10. y 0. 0. 10. couple xy dilate all
 velocity all create ${temperature} ${seed}
 timestep        0.01
 
-
 # define output
 thermo 100
 variable lx equal lx
@@ -67,12 +72,8 @@ fix avg_lx all ave/time 1 100 100 v_lx mode scalar ave one
 thermo_style custom step lx temp pe time cpu etotal nbuild ndanger fmax fnorm f_avg_lx &
 ebond eangle epair pxx pyy pzz
 
-
-
 dump dump all netcdf 1000 traj.nc x y z
 dump_modify dump thermo yes
 
-
-
 # run
-run $(1000*100) # EDIT HERE, 100 steps = 1\tau
+run $(v_duration*100) # 100 steps = 1\tau

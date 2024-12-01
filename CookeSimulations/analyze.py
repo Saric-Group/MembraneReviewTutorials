@@ -2,8 +2,9 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from math import nan
 from pathlib import Path
-from typing import Protocol, TypeVar, cast
+from typing import Protocol, cast
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.optimize
@@ -21,8 +22,6 @@ from ovito.modifiers import (
 )
 from tqdm.auto import tqdm
 from z2u import zL2u
-
-T = TypeVar("T", bound=ArrayLike)
 
 
 def modify_clusters(frame: int, data: DataCollection, threshold_count: int = 50):
@@ -124,7 +123,6 @@ def calc_hfield(target: Path, n_modes: int = 20, sel=slice(None, None, None)):
         Z = Zs / Cs
         return Z, boxsize[0]
 
-    # case=case.subset_stable()
     pipeline = make_pipeline(target)
 
     pipeline.modifiers.append(ExpressionSelectionModifier(expression="ParticleType==2"))
@@ -222,7 +220,7 @@ def thermo_2_df(target: Path, debug: bool = False):
         return df
 
 
-def div0(a: T, b: T, fill: float = np.nan) -> T:
+def div0[T: np.ndarray](a: T, b: T, fill: float = np.nan) -> T:
     """a / b, divide by 0 -> `fill`
     div0( [-1, 0, 1], 0, fill=np.nan) -> [nan nan nan]
     div0( 1, 0, fill=np.inf ) -> inf
@@ -367,20 +365,19 @@ def fit_Q(
     return fit_Q_res(mlh_res=fit_res, x_last=x_last)
 
 
-import matplotlib.pyplot as plt
-import pandas as pd
-
 models = {
     "k": Model_f_u_k,
 }
+
+import matplotlib.pyplot as plt
+from uncertainties import ufloat
 
 
 def fs_fit_df(
     df: pd.DataFrame,
     do_plot: bool = False,
-    plot_x_range=(10**-1, 10**1),
-    fit_x_range=(10**-1, 2 * np.pi / 12),
-    plot_fit_x_range=(10**-1, 10**0),
+    plot_x_range=(10**-1, 10**0),
+    fit_x_range=(2 * np.pi / 32, 2 * np.pi / 12),
 ):
     """_summary_
 
@@ -392,20 +389,16 @@ def fs_fit_df(
 
     Returns
     -------
-    pd.Dataframe
-        model -> Q, (k,a,t) X (v,e)
-    """
-    r = []
-    import matplotlib.pyplot as plt
 
+    """
+    plot_fit_x_range = fit_x_range
     if do_plot:
         plt.xscale("log")
         plt.yscale("log")
-        # plt.ylim(10**-1,10**3)
         plt.xlim(*plot_x_range)  # right = x_max if np.isfinite(x_max) else None)
 
-        plt.axvline(x=fit_x_range[1], color="red")
-        plt.axvline(x=fit_x_range[0], color="red")
+        plt.axvline(x=fit_x_range[1], color="black", alpha=0.5)
+        plt.axvline(x=fit_x_range[0], color="black", alpha=0.5)
 
     if "u" in df:
         x = np.array(df["q"], dtype=float)
@@ -423,63 +416,76 @@ def fs_fit_df(
     s = (fit_x_range[0] <= x) & (x <= fit_x_range[1])
     x, y, e = x[s], y[s], e[s]
 
-    for model, Model in models.items():
-        rd2 = {}
-        rd2["model"] = model
+    model_fit = {}
 
-        rd3 = rd2.copy()
+    m = Model_f_u_k()
+    fit_res = m.fit(x=x, y=y, e=e)
 
-        m = Model()
-        fit_res = m.fit(x=x, y=y, e=e)
+    param_names = ["k"]
+    model_fit["Q"] = fit_res.Q
+    model_fit |= {
+        k: ufloat(v, e) for k, v, e in zip(param_names, fit_res.popt, fit_res.perr)
+    }
 
-        param_names = list(model)
-        rd3["Q"] = fit_res.Q
-        rd3.update(zip((k + "_v" for k in param_names), fit_res.popt))
-        rd3.update(zip((k + "_e" for k in param_names), fit_res.perr))
+    if do_plot:
+        x2 = np.logspace(np.log10(plot_fit_x_range[0]), np.log10(plot_fit_x_range[1]))
+        plt.plot(
+            x2,
+            m.func(x2, *fit_res.popt),
+            label="theory",
+            color="grey",
+            alpha=0.5,
+            linestyle="--",
+        )
 
-        if do_plot:
-            # print(name,fit_res,f"{fit_res.Q=:E}")
-            x2 = np.logspace(
-                np.log10(plot_fit_x_range[0]), np.log10(plot_fit_x_range[1])
-            )
-            plt.plot(x2, m.func(x2, *fit_res.popt), label=repr(rd2))
-        r.append(rd3)
     if do_plot:
         plt.legend()
+        plt.xlabel(R"Wavenumber $q / \sigma^{-1}$")
+        plt.ylabel(R"Scaled power $\langle h^2 \rangle L^2 / \sigma^4$")
 
-    d = pd.DataFrame.from_records(r)
-    for k, v in {"a": 4.0, "t": 0.0, "p": np.nan}.items():
-        d.fillna({k + "_v": v}, inplace=True)
-        d.fillna({k + "_e": 0.0}, inplace=True)
-
-    ks = ["model"]
-    d = d.sort_values(ks, kind="stable").set_index(ks)
-
-    return d
+    return model_fit
 
 
 def main():
     # compute height field
-    # step_discard=10e3*1e2
-    step_discard = 104600 * 0.5
+
     import sys
 
     target = Path(sys.argv[-1])
 
     # get average box size from thermo data
     df = thermo_2_df(target / "log.lammps")
-    print(df["f_avg_lx"])
+    df["f_avg_lx"] = np.where(df["f_avg_lx"] == 0.0, np.nan, df["f_avg_lx"])
+
+    step_discard = (
+        10e3 / 60e3 * df.step.max()
+    )  # proportionally remove initial trajectory for equilibration. for shorter than 60e3 it will not be accurate.
+
+    plt.figure()
+    plt.plot(df["step"] * 1e-2, df["f_avg_lx"])
+    plt.xlabel(R"$\tau$")
+    plt.ylabel(R"$L$")
+    plt.axvline(
+        x=step_discard * 1e-2,
+        linestyle="--",
+        alpha=0.5,
+        label="equilibration threshold",
+    )
+
+    plt.legend()
+    plt.savefig("L.pdf")
+    plt.clf()
 
     lx_ufloat = series2ufloat(
         np.array(df[df.step > step_discard].iloc[:-1]["f_avg_lx"])
     )
     assert lx_ufloat is not None
 
-    # fourier transform it
-
     L_avg = lx_ufloat.n
+    print(f"L_avg={lx_ufloat}")
     n_modes = 2 * (int(L_avg / 3) // 2)
 
+    # compute height field
     Z_path = target / f"H_{n_modes}.nc"
     if not (Z_path).exists():
         Z = calc_hfield(target, n_modes=n_modes)
@@ -489,20 +495,24 @@ def main():
         .sel(step=slice(step_discard, None))
         .swap_dims({"step": "time"})
     )
-
+    # fourier transform it and average powers
     u = zL2u(z_ds, L_avg=L_avg)
     spectrum = (
         u.to_dataframe()
         .drop(columns=["nx", "ny"])
         .rename(columns={"nn": "n"})
         .reset_index()
+        .sort_values("n")
     )
     spectrum.to_csv(target / "spectrum.csv")
 
-    # plot and fit
-    print(fs_fit_df(spectrum.query("ok"), do_plot=True))
-    plt.show()
+    spectrum = spectrum.query("ok")
 
+    # plot and fit
+    model_fit = fs_fit_df(spectrum, do_plot=True)
+    print("\n".join(f"{k}={v}" for k, v in model_fit.items()))
+
+    plt.savefig("spectrum.pdf")
     # TODO: move code for multiple replica merging
 
 

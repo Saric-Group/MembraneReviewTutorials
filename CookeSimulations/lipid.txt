@@ -3,7 +3,6 @@
 3 atoms
 2 bonds
 1 angles
-
 # body section:
 Coords
 

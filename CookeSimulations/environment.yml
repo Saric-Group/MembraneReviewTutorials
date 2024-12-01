@@ -2,6 +2,7 @@ channels:
   - https://conda.ovito.org
   - conda-forge
 dependencies:
+  - python=3.12
   - lammps
   - numpy
   - scipy
