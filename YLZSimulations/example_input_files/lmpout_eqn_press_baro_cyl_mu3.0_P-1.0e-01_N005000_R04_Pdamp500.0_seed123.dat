@@ -1,0 +1,4 @@
+# Time-averaged data for fix fix_eqn_baro
+# TimeStep c_C_press_baro c_C_press_baro[1] c_C_press_baro[2] c_C_press_baro[3] c_C_press_baro[4] c_C_press_baro[5] c_C_press_baro[6] c_C_temp_baro
+0 -15336.9 -25987.4 -10010.6 -10012.6 7.35216e-12 4.41844e-12 1.33843e-12 0
+100 2093.88 -489.326 3319.32 3451.63 7.21662 -119.574 213.911 0.673957

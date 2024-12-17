@@ -15,7 +15,7 @@ This repository contains ready-to-run tutorials on the simulation tests presente
 [See respective folder](CookeSimulations).
 
 ### 2. One-particle thick fluid membrane: YLZ model <a name="ylz"></a>
-Please add info needed to understand and run your tutorial(s).
+[See respective folder](YLZSimulations).
 
 ### 3. Dynamically triangulated membrane model: TriLMP  <a name="trilmp"></a>
 We choose TriLMP to simulate a fluid membrane using a Dynamically Triangulated Network (DTN). TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022] developed within the Saric Group at ISTA. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [DTNSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations) to run the tutorials of this section.

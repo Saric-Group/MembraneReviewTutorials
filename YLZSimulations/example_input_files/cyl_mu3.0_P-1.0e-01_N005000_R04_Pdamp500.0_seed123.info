@@ -1,0 +1,51 @@
+seed 123
+seed_con 605
+N 5000
+Nc 330
+Nc_membrane 25
+Nc2 17
+Nh 480
+Pdamp 500
+Tdamp0 1
+Tdamp 1
+barostat_nreset 100
+P -0.1
+dt 0.01
+bar on
+box_size [0, 200, 200]
+t_equilibration_nvt0 100
+t_equilibration_nvt 400
+t_pressure_estimation 0
+t_equilibration_npt_ramp 0
+t_equilibration_npt 0
+t_middle 10000
+t_after 0
+drag 0
+mpot ylz
+shape cyl
+escrt ---
+fil_stuck True
+tether 
+tether_length 10
+tether_strength 50
+tether_speed 1
+tether_Nbead 1
+v_dis 0.1
+v_con 0.4
+report_period 1
+midbody False
+midbody_size 100
+midbody_mass 1000
+midbody_location -60
+cylinder 
+cylinder_radius_scaffold 2
+cylinder_radius_bridge 10
+neck_length 14
+neck_transition_lenght 2
+f_magnitude 5
+restart 0
+name_data {'R': 4}
+recenter 
+ylz_mu 3
+barostat_type nph
+barostat_value stress_per_bead
