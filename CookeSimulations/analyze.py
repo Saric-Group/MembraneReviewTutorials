@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from math import nan
 from pathlib import Path
-from typing import Protocol, cast
+from typing import cast
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,7 +11,6 @@ import scipy.optimize
 import scipy.special
 import xarray as xr
 from equilibration import series2ufloat
-from numpy.typing import ArrayLike
 from ovito.data import DataCollection, DataTable
 from ovito.io import import_file
 from ovito.modifiers import (
@@ -21,6 +20,7 @@ from ovito.modifiers import (
     LoadTrajectoryModifier,
 )
 from tqdm.auto import tqdm
+from uncertainties import ufloat
 from z2u import zL2u
 
 
@@ -85,7 +85,7 @@ def make_pipeline(target: Path):
 
 def calc_hfield(target: Path, n_modes: int = 20, sel=slice(None, None, None)):
 
-    def get_H(data, N):
+    def get_zl(data:DataCollection, N:int):
         particle_cluster = np.array(data.particles["Cluster"])
 
         cell = data.cell
@@ -112,16 +112,16 @@ def calc_hfield(target: Path, n_modes: int = 20, sel=slice(None, None, None)):
 
         pos_z = pos[:, 2]
 
-        Zs = np.zeros(shape)
+        zs = np.zeros(shape)
         # print(IND.shape)
-        np.add.at(Zs, tuple(IND.T), pos_z)
+        np.add.at(zs, tuple(IND.T), pos_z)
 
         Cs = np.zeros(shape, dtype=int)
         np.add.at(Cs, tuple(IND.T), 1)
 
         assert (~(Cs < 10)).all()
-        Z = Zs / Cs
-        return Z, boxsize[0]
+        z = zs / Cs
+        return z, boxsize[0]
 
     pipeline = make_pipeline(target)
 
@@ -143,7 +143,7 @@ def calc_hfield(target: Path, n_modes: int = 20, sel=slice(None, None, None)):
         data = pipeline.compute(frame)
         l_step.append(data.attributes["Step"])
         l_time.append(data.attributes["Time"])
-        l.append(get_H(data, n_modes))
+        l.append(get_zl(data, n_modes))
     Z = np.stack([Z for Z, L in l], axis=0)
     L = np.stack([L for Z, L in l], axis=0)
 
@@ -220,7 +220,7 @@ def thermo_2_df(target: Path, debug: bool = False):
         return df
 
 
-def div0[T: np.ndarray](a: T, b: T, fill: float = np.nan) -> T:
+def div_fill[T: np.ndarray|float](a: T, b: T, fill: float = np.nan) -> T:
     """a / b, divide by 0 -> `fill`
     div0( [-1, 0, 1], 0, fill=np.nan) -> [nan nan nan]
     div0( 1, 0, fill=np.inf ) -> inf
@@ -246,7 +246,6 @@ class mlh_res:
             popt=np.full_like(p0, np.nan), perr=np.full_like(p0, np.nan), Q=np.nan
         )
 
-
 def mlh(
     f: Callable,
     p0: np.ndarray,
@@ -259,7 +258,7 @@ def mlh(
     pcov: np.ndarray
     e_valid = not (np.isnan(e).all())
 
-    # drop points without errors
+    # drop points without error bars
     if e_valid:
         sel = np.isfinite(e)
         x, y, e = x[sel], y[sel], e[sel]
@@ -281,45 +280,31 @@ def mlh(
     pcov_dia: np.ndarray = np.diag(pcov)
     perr: np.ndarray = np.sqrt(pcov_dia)
 
-    chisq = np.sum(div0((y - f(x, *popt)), e) ** 2)
+    chisq = np.sum(div_fill((y - f(x, *popt)), e) ** 2)
     N = len(p0)
     M = len(x)
     k = M - N
-    # print(N,M,k,chisq)
 
     Q: float = scipy.special.gammaincc(k / 2, chisq / 2) / scipy.special.gamma(k / 2)
 
     return mlh_res(popt, perr, Q)
 
 
-class Model(Protocol):
-    func: Callable
-    p0: np.ndarray
-    bounds: tuple
-
-    def fit(self, x: np.ndarray, y: np.ndarray, e: np.ndarray) -> mlh_res: ...
-
-
-def f_kat(x, k, a, t):
-    return div0(1.0, k * x**a + t * x**2)
-
-
-def _fit(self, x: np.ndarray, y: np.ndarray, e: np.ndarray):
-    return mlh(f=self.func, p0=self.p0, bounds=self.bounds, x=x, y=y, e=e)
-
-
 @dataclass
-class Model_f_u_k(Model):
-    func: Callable = lambda x, k: cast(float, div0(1, k * x**4, fill=np.nan))
+class Model_f_u_k:
+    func: Callable = lambda x, k: cast(float, div_fill(1., k * x**4, fill=np.nan))
     p0 = np.array(
         [
             10,
         ]
     )
     bounds = tuple(np.array([[0.0, np.inf]]).T)
-    fit = _fit
-
-
+    def fit(self, x: np.ndarray, y: np.ndarray, e: np.ndarray):
+        return mlh(f=self.func, p0=self.p0, bounds=self.bounds, x=x, y=y, e=e)
+    def fit_res_to_dict(self,res:mlh_res):
+        return {'Q':res.Q}| {
+            k: ufloat(v, e) for k, v, e in zip(["k"], res.popt, res.perr)
+        }
 def test_f_u_k():
     m = 10
     x = np.logspace(0.1, 1, base=10, num=m)
@@ -329,48 +314,6 @@ def test_f_u_k():
     e = m.func(x * (1 + np.random.default_rng().random(x.shape) * 1e-4), *p) - y
     r = m.fit(x=x, y=y, e=e)
     assert np.allclose(np.array([*p]), r.popt) and r.Q > 1e-2, r
-
-
-@dataclass
-class fit_Q_res:
-    mlh_res: mlh_res
-    x_last: float
-
-
-def fit_Q(
-    x: np.ndarray,
-    y: np.ndarray,
-    e: np.ndarray,
-    m: Model,
-    Q_threshold: float = 1e-4,
-    x_max: float = np.inf,
-):
-    n = len(x)
-    js = np.arange(n)[(x <= x_max)]
-    js = js[js >= 3]  # at least 3 points must be present
-    assert len(js) > 0, repr(js)
-
-    fit_js = [m.fit(x=x[:j], y=y[:j], e=e[:j]) for j in js]
-
-    Qs = np.array([fit.Q for fit in fit_js])
-    Qgood = np.where(Qs > Q_threshold)[0]
-
-    if len(Qgood) == 0:
-        x_last = np.inf
-        fit_res = mlh_res.nan_from_p0(m.p0)
-    else:
-        k = int(Qgood[-1])
-        fit_res = fit_js[k]
-        x_last = x[js[k]]
-    return fit_Q_res(mlh_res=fit_res, x_last=x_last)
-
-
-models = {
-    "k": Model_f_u_k,
-}
-
-import matplotlib.pyplot as plt
-from uncertainties import ufloat
 
 
 def fs_fit_df(
@@ -391,7 +334,6 @@ def fs_fit_df(
     -------
 
     """
-    plot_fit_x_range = fit_x_range
     if do_plot:
         plt.xscale("log")
         plt.yscale("log")
@@ -416,19 +358,12 @@ def fs_fit_df(
     s = (fit_x_range[0] <= x) & (x <= fit_x_range[1])
     x, y, e = x[s], y[s], e[s]
 
-    model_fit = {}
-
     m = Model_f_u_k()
     fit_res = m.fit(x=x, y=y, e=e)
-
-    param_names = ["k"]
-    model_fit["Q"] = fit_res.Q
-    model_fit |= {
-        k: ufloat(v, e) for k, v, e in zip(param_names, fit_res.popt, fit_res.perr)
-    }
+    fit_res_dict=m.fit_res_to_dict(fit_res)
 
     if do_plot:
-        x2 = np.logspace(np.log10(plot_fit_x_range[0]), np.log10(plot_fit_x_range[1]))
+        x2 = np.logspace(np.log10(fit_x_range[0]), np.log10(fit_x_range[1]))
         plt.plot(
             x2,
             m.func(x2, *fit_res.popt),
@@ -443,7 +378,7 @@ def fs_fit_df(
         plt.xlabel(R"Wavenumber $q / \sigma^{-1}$")
         plt.ylabel(R"Scaled power $\langle h^2 \rangle L^2 / \sigma^4$")
 
-    return model_fit
+    return fit_res_dict
 
 
 def main():

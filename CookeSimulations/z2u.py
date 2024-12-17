@@ -258,6 +258,7 @@ def z2Z(z: xr.DataArray):
     )
     assert not np.isnan(Z).any()
 
+    # correct for averaging
     Z /= xr.apply_ufunc(
         np.sinc,
         Z["nx"] / z.sizes["x"],
@@ -271,12 +272,15 @@ def z2Z(z: xr.DataArray):
 
 def zL2u(ds: xr.Dataset, L_avg: float):
     """Computes ( A(amplitude)*avg(L(box length)) )^2 vs wavenumber from height field timeseries in the form of a rectilinear grid obtained by averaging height in each cell.
-    Assumes box length is stable and groups measurements by wavenumber.
+    Groups measurements by wavenumber, and assumes box has approximately constant length.
 
     Parameters
     ----------
     z : xr.DataArray
         [time,x,y] -> float
+        timeseries of 2d height field
+    L_avg : float
+        average box size
 
     Returns
     -------
@@ -292,16 +296,17 @@ def zL2u(ds: xr.Dataset, L_avg: float):
     """
 
     z = ds["z"]
+    # fourier transform z_{i,j} to Z_{i,j}
     Z = z2Z(z)
+
+    # only trajectories with constant spacing between samples
     assert ((d := np.diff(Z.time.data)) == d[0]).all()
     delta_time = d[0]
 
-    # Lm = L.mean("time")
-    Lm = L_avg
-    ZL = Z * Lm
+    ZL = Z * L_avg
 
     u = Z2g(ZL)
     u["tau"] = (u["g"] - 1) * delta_time / 2
     u["ok"] = (Z.sizes["time"] / u["g"]) > 20
-    u["q"] = 2 * np.pi * u["nn"] / Lm
+    u["q"] = 2 * np.pi * u["nn"] / L_avg
     return u
