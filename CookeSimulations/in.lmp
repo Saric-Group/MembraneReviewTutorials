@@ -35,9 +35,9 @@ bond_style fene
 angle_style harmonic
 
 # 1 : head , 2 : tail
-pair_coeff 1 1 1. $(0.95*v_two6) ${two6} wca
-pair_coeff 1 2 1. $(0.95*v_two6) ${two6} wca
-pair_coeff 2 2 1. ${two6} ${tt_rc} wca
+pair_coeff 1 1 1. ${hh_sigma} ${hh_sigma} wca
+pair_coeff 1 2 1. ${hh_sigma} ${hh_sigma} wca
+pair_coeff 2 2 1. ${tt_sigma} ${tt_rc} wca
 bond_coeff 1 30.0 1.5 1.0 1.0
 angle_coeff 1 5.0 180.0
 
