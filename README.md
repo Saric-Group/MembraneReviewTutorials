@@ -24,7 +24,7 @@ We choose TriLMP to simulate a fluid membrane using a Dynamically Triangulated N
 
 Please report any bugs. Feedback on how to improve this tutorials is welcome.
 
-[^RevCit]: Our own citation et al., (2024), A guide to modeling mesoscale membrane deformations with coarse-grained computer simulations
+[^RevCit]: Munoz-Basagoiti, Frey, Meadowcroft, Amaral, Prada and Saric, A guide to modeling mesoscale membrane deformations with coarse-grained computer simulations (submitted, 2025)
 [^Siggel2022]: Siggel, M. et al. (2022) TriMem: A Parallelized Hybrid Monte
   Carlo Software for Efficient Simulations of Lipid Membranes.
   J. Chem. Phys. (in press) (2022); https://doi.org/10.1063/5.0101118
