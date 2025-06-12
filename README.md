@@ -1,12 +1,13 @@
 # A guide to modeling mesoscale membrane deformations with coarse-grained computer simulations
 
-This repository contains ready-to-run tutorials on the simulation tests presented in the membrane review by B. Meadowcroft, F. Frey, M. Muñoz-Basagoiti, A. Prada, M. Amaral and A. Saric[^RevCit].
+This repository contains ready-to-run tutorials on the simulation tests presented in the membrane review by M. Muñoz-Basagoiti, F. Frey,  B. Meadowcroft, M. Amaral, A. Prada, and A. Saric[^RevCit] ([2502.09798](https://arxiv.org/abs/2502.09798); under review).
 
 ## Table of contents
 1. [Tutorials](#tutorials)
     1. [Three-beads-per-lipid membrane: Cooke model](#cooke)
     2. [One-particle thick fluid membrane: YLZ model](#ylz)
-    3. [Dynamically triangulated membrane model: TriLMP](#trilmp)
+    3. [Dynamically triangulated membrane model I: Monte Carlo simulations with C code](#mcsims)
+    4. [Dynamically triangulated membrane model II: Parallelized Hybrid Monte Carlo simulations with TriLMP](#trilmp) 
 2. [Reporting bugs and feedback](#bugs)
 
 ## Tutorials <a name="tutorials"></a>
@@ -17,8 +18,11 @@ This repository contains ready-to-run tutorials on the simulation tests presente
 ### 2. One-particle thick fluid membrane: YLZ model <a name="ylz"></a>
 [See respective folder](YLZSimulations).
 
-### 3. Dynamically triangulated membrane model: TriLMP  <a name="trilmp"></a>
-We choose TriLMP to simulate a fluid membrane using a Dynamically Triangulated Network (DTN). TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022] developed within the Saric Group at ISTA. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [DTNSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations) to run the tutorials of this section.
+### 3. Dynamically triangulated membrane model I: Monte Carlo simulations with C code  <a name="mcsims"></a>
+[See respective folder](MCSimulations).
+
+### 4. Dynamically triangulated membrane model II: Parallelized HMC simulations with TriLMP  <a name="trilmp"></a>
+It is possible to simulate dynamically triangulated network in parallel by using TriLMP. TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022] developed within the Šarić Group at ISTA. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [HMCSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations) to run the tutorials of this section.
 
 ## Reporting bugs and feedback  <a name="bugs"></a>
 
