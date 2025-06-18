@@ -1,6 +1,6 @@
-# Tether extrusion with a Dynamically Triangulated Network II: Hybrid Monte Carlo Simulations with TriLMP
+# Tether extrusion with a Dynamically Triangulated Network II: Parallelized Hybrid Monte Carlo Simulations with TriLMP
 
-Generating the force-extrusion profile shown in the review requires two steps in the analysis, which are detailed below. All the codes necessary to generate the data are provided. These have been tested and thoroughly commented with the goal of teaching the reader the basic functioning of the [TriLMP software](https://github.com/Saric-Group/trimem_sbeady). At the end of the tutorial, the reader will be able to simulate Dynamically Triangulated Networks (DTNs) using TriLMP.
+It is possible to simulate the configurations of a dynamically triangulated mesh in parallel, by using software such as TriMem (see [Siggel *et al.*, 2023](https://pubs.aip.org/aip/jcp/article/157/17/174801/2842373/TriMem-A-parallelized-hybrid-Monte-Carlo-software)) or [PyMembrane](https://github.com/fdmatoz/PyMembrane) (see [Matoz-Fernandez *et al.*, 2023](https://arxiv.org/abs/2308.12754)). In this tutorial, we show how to efficiently measure the force required to extrude a tube from a membrane patch using the [TriLMP software](https://github.com/Saric-Group/trimem_sbeady), which couples [TriMem](https://github.com/bio-phys/trimem) to [LAMMPS](https://github.com/lammps/lammps). The simulation procedure is separated in two steps, which are detailed below; all the codes necessary to generate the data are provided. These have been tested and thoroughly commented with the goal of teaching the reader the basic functioning of [TriLMP](https://github.com/Saric-Group/trimem_sbeady). 
 
 ## 1. Generate initial configurations
 
@@ -18,6 +18,7 @@ We additionally provide a bash script that allows you to submit the simulation i
 This first simulation allows you to understand the basic structure of TriLMP. Indeed, running a TriLMP simulation involves 3 stages, which we detail below.
 
 **A. Create the TriLmp object**
+
 This step initializes the simulation set-up. 
 
 Here you define:
@@ -32,6 +33,7 @@ Here you define:
 - The frequency at which performance, system info is outputted and checkpoints are created by TriLMP
   
 **B. Add LAMMPS commands to the simulation**
+
  Here you can choose to pass as many LAMMPS commands as desired to your simulation.
  
  Note that there are some compulsory commands (see pair_styles or time-integration sections below)
@@ -42,6 +44,7 @@ Here you define:
 - *Post-equilibration commands*: Pass them by appending them to the postequilibration_commands list below (they will be run once the pre-equilibration stage has ended, in order)
   
 **C. Run**
+
 Run the simulation by calling the TriLmp.run(args) method with its corresponding arguments.
 
 ## 2. Equilibrate the membrane from generated configurations
