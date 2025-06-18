@@ -1,0 +1,18 @@
+20.0 1.0 460 1 151 306 10.0 111 1 0 0.0001 50 1.0 5.5 27 27 195 
+kappa
+surftension
+N
+Ncoll
+Nedges
+Nbound
+sigma_colloid
+seed
+is_mem_fluid
+start_from_config
+speed_pulling
+position_bead
+k_harmonic
+r_eq
+LX 
+LY 
+LZ    
