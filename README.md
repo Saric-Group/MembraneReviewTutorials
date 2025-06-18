@@ -22,7 +22,7 @@ This repository contains ready-to-run tutorials on the simulation tests presente
 [See respective folder](MCSimulations).
 
 ### 4. Dynamically triangulated membrane model II: Parallelized HMC simulations with TriLMP  <a name="trilmp"></a>
-It is possible to simulate dynamically triangulated network in parallel by using TriLMP. TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022] developed within the Šarić Group at ISTA. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [HMCSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/DNTSimulations) to run the tutorials of this section.
+Simulate dynamically triangulated network in parallel by using TriLMP. TriLMP is a modified version of the [TriMEM](https://github.com/bio-phys/trimem) package[^Siggel2022] developed within the Šarić Group at ISTA. To be able to run the tutorials of this section, you will have to install TriLMP. For that, please go to the [TriLMP Github repository](https://github.com/Saric-Group/trimem_sbeady) and follow the installation guide for your operating system. Once you have verified that your installation is working fine, go to [HMCSimulations](https://github.com/Saric-Group/MembraneReviewTutorials/tree/main/HMCSimulations) to run the tutorials of this section.
 
 ## Reporting bugs and feedback  <a name="bugs"></a>
 
