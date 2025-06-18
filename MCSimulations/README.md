@@ -15,7 +15,7 @@ In this tutorial, we will measure the force required to extrude a tube from a me
 4. [Reporting bugs, feedback and credit](#4-reporting-bugs-beedback-and-credit)
 
 ## 1. Description of the MC code
-The MC code can be found in the [`src_c`](src) directory. The main files are `main.c`, `Functions.h`, `DataStructures.h` and `PreprocessorDeclarations.h`. The rest of the files are associated to [`uthash`](https://troydhanson.github.io/uthash/), which is a library for hash tables used in the code to efficiently identify bulk and edge vertices (see review for details on the simulation set-up). 
+The MC code can be found in the [`src_c`](src_c) directory. The main files are `main.c`, `Functions.h`, `DataStructures.h` and `PreprocessorDeclarations.h`. The rest of the files are associated to [`uthash`](https://troydhanson.github.io/uthash/), which is a library for hash tables used in the code to efficiently identify bulk and edge vertices (see review for details on the simulation set-up). 
 
 ### A. Editable variables
 
@@ -53,7 +53,7 @@ To run the code, you have to place the executable `EXENAME` in a directory, toge
 
 ### A. Python codes to initialize the system
 
-In `src_python` we provide python codes that help you establish your working directory as well as all the files needed for the simulation. All you need to do is edit the `Launcher.py` file and run it: it will produce a directory for the simulation, together with the `in.ves` and `flatpath*.dat` files that correspond to the simulations you want to run. Check the `Launcher.py` file to see the parameters that you can change. 
+In [`src_python`](src_python) we provide python codes that help you establish your working directory as well as all the files needed for the simulation. All you need to do is edit the `Launcher.py` file and run it: it will produce a directory for the simulation, together with the `in.ves` and `flatpath*.dat` files that correspond to the simulations you want to run. Check the `Launcher.py` file to see the parameters that you can change. 
 
 ### B. The `in.ves` file in detail
 
