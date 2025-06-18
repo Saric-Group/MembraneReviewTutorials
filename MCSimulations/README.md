@@ -14,10 +14,10 @@ In this tutorial, we will measure the force required to extrude a tube from a me
     - [Data produced](#c-data-produced)
 4. [Reporting bugs, feedback and credit](#4-reporting-bugs-beedback-and-credit)
 
-## 1. Description of the MC code <a name="descriptioncode"></a>
+## 1. Description of the MC code
 The MC code can be found in the [`src_c`](src) directory. The main files are `main.c`, `Functions.h`, `DataStructures.h` and `PreprocessorDeclarations.h`. The rest of the files are associated to [`uthash`](https://troydhanson.github.io/uthash/), which is a library for hash tables used in the code to efficiently identify bulk and edge vertices (see review for details on the simulation set-up). 
 
-### A. Editable variables<a name="editablevariables"></a>
+### A. Editable variables
 
 The main variables of the simulation are provided in the `in.ves` file (see below). However, the `PreprocessorDeclarations.h` contains 3 global variables that you can edit to run your simulation. These are:
 - `MCEQUILIBRATE`, which sets the number of MC sweeps during the equilibration stage
@@ -36,7 +36,7 @@ To generate fluid membrane configurations, the program loops over two steps:
 
 To extrude a membrane tube, we tether a bead via a harmonic bond to a single vertex in the mesh. Once the membrane has equilibrated after `MCEQUILIBRATE` steps, we gradually update the position of the pulling bead through increments `speed_pulling` until it reaches a final prescribed position; it will remain fixed in place once this happens.  By design, the pulling bead can only move along the z-direction. Additionally, to keep the membrane tension constant, the simulation method implements a specific set-up based on bulk and edge vertices; see the review for further details and discussion on the set-up.
 
-## 2. Compiling the code <a name="descriptioncode"></a>
+## 2. Compiling the code
 To compile the code,
 1. Go to directory where `*.c` and `*.h` files are
 2. Run `gcc -o EXENAME *.c` in the terminal
@@ -47,7 +47,7 @@ Choose any executable name that what you want, i.e., substitute `EXENAME`. Pleas
 
 to also link the math libraries.
 
-## 3. Running the code <a name="runningcode"></a>
+## 3. Running the code
 
 To run the code, you have to place the executable `EXENAME` in a directory, together with the `in.ves` and `flatpatch*.dat` files. Then, simply execute `./EXENAME` in the command line.
 
