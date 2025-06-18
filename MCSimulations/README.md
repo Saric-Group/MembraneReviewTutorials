@@ -53,6 +53,8 @@ To run the code, you have to place the executable `EXENAME` in a directory, toge
 
 ### A. Python codes to initialize the system
 
+*(NB: You will need a Python distribution with `numpy`)*
+
 In [`src_python`](src_python) we provide python codes that help you establish your working directory as well as all the files needed for the simulation. All you need to do is edit the `Launcher.py` file and run it: it will produce a directory for the simulation, together with the `in.ves` and `flatpath*.dat` files that correspond to the simulations you want to run. Check the `Launcher.py` file to see the parameters that you can change. 
 
 ### B. The `in.ves` file in detail
