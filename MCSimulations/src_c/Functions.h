@@ -906,9 +906,9 @@ void painter(int SWEEP){
     char iiiii[500], bbbbb[500];
     FILE *o, *bo;
     
-    sprintf(iiiii,"out_N_%d_Sig_%f_kappa_%lf_gamma_%lf_seed_%d_.dump",N, 2*Coll.rad, S.kappa, S.gamma, seed);
+    sprintf(iiiii,"out.dump");
     o=fopen(iiiii,"a+");
-    sprintf(bbbbb,"bonds_N_%d_Sig_%f_kappa_%lf_gamma_%lf_seed_%d_.dump",N, 2*Coll.rad, S.kappa, S.gamma, seed);
+    sprintf(bbbbb,"bonds.dump");
     bo=fopen(bbbbb,"a+");
 
     // getting the file ready for ovito
@@ -987,7 +987,7 @@ void painter_en(int i, int counter, int N, int Ncoll, int Ntri){
     char iiiii[500];
     FILE *o;
 
-    sprintf(iiiii,"energy_N_%d_Sig_%f_kappa_%lf_gamma_%lf_seed_%d_.dump",N, 2*Coll.rad, S.kappa, S.gamma, seed);
+    sprintf(iiiii,"energy.dump");
     o=fopen(iiiii,"a+");
     fprintf(o,"%d %lf %lf %lf %lf %lf %lf %lf %lf\n",i,S.kappa,S.gamma,EnBend,S.SurfArea,harmenergy, S.EbendChange,S.EbindChange_bead_colloid,S.Esurfchange);
 
@@ -1048,7 +1048,7 @@ void painter_nanoparticles(void){
     char iiii[500];
     FILE *o;
 
-    sprintf(iiii,"nanoparticles_N_%d_Nnanop_%d_Sig_%f_fBC_%lf_fCB_%lf_inorout_%d_kappa_%lf_seed_%d_.dat",N, Ncoll, 2*Coll.rad, factor_bead_colloid, factor_colloid_bead, inorout, S.kappa, seed);
+    sprintf(iiii,"position_pulling_bead.dat");
     o=fopen(iiii,"a+");
 
     for(i=N+1; i<=N+Ncoll; i++){
@@ -1730,8 +1730,6 @@ double bending_1p(int oo,int ee){
         
         if (vo==4){
             printf("BIG PROBLEM, CHECK TRIANGLES\n Triangle %d) p1=%d p2=%d p3=%d looking for(%d)\n\n", here,Tr[here].v[0],Tr[here].v[1],Tr[here].v[2],k );
-            painter3();
-            painter2();
             exit(-1);
         }
 

@@ -68,7 +68,7 @@ int main(int argc, const char * argv[]) {
         &k_harmonic, &r_eq, &LX, &LY, &LZ);
 
     printf("** Total number of particles: %d **\n", N+Ncoll);
-    printf("Parameters:\n - Bending modulus: %lf\n - Surface tension eq.: %lf\n - Pressure: %lf\n - Nmembrane: %d\n - Nnanops: %d\n - Nedges: %d\n - Nbound: %d\n - Sigma nanop: %lf\n - Factor colloid-->bead: %lf\n - Factor bead-->colloid: %lf\n - Int. cutoff: %lf\n - Seed: %d\n - Is membrane fluid? 1 = YES, 0 = NO --> %d\n - k_harmonic: %lf\n - r_eq: %lf\n - speed_pulling: %lf\n - LX: %d - LY: %d - LZ: %d\n", S.kappa,S.gamma,S.pres, N,Ncoll, Nedges, Nbound, Coll.sig, factor_colloid_bead, factor_bead_colloid, Coll.rc, seed, is_mem_fluid, k_harmonic, r_eq, speed_pulling, LX, LY, LZ);
+    printf("Parameters:\n - Bending modulus: %lf\n - Surface tension eq.: %lf\n - Nmembrane: %d\n - Nnanops: %d\n - Nedges: %d\n - Nbound: %d\n - Sigma nanop: %lf\n - Int. cutoff: %lf\n - Seed: %d\n - Is membrane fluid? 1 = YES, 0 = NO --> %d\n - k_harmonic: %lf\n - r_eq: %lf\n - speed_pulling: %lf\n - LX: %d - LY: %d - LZ: %d\n", S.kappa,S.gamma,N,Ncoll, Nedges, Nbound, Coll.sig, Coll.rc, seed, is_mem_fluid, k_harmonic, r_eq, speed_pulling, LX, LY, LZ);
 
     // ----------- WHEN COLLOIDS PRESENT: define MC move for colloids, interaction cutoff (assumes sig_BEAD = 1), verlet cutoff...
     // (not entirely applicable for the pulling experiment)
@@ -93,22 +93,28 @@ int main(int argc, const char * argv[]) {
 
         // trajectory of the system
         char iiiii[500];
-        sprintf(iiiii,"out_N_%d_Sig_%f_kappa_%lf_gamma_%lf_seed_%d_.dump",N, 2*Coll.rad, S.kappa, S.gamma, seed);
+        sprintf(iiiii,"out.dump");
         FILE *clean;
         clean = fopen(iiiii, "w");
         fclose(clean);
 
         // bonds of the system
-        sprintf(iiiii,"bonds_N_%d_Sig_%f_kappa_%lf_gamma_%lf_seed_%d_.dump",N, 2*Coll.rad, S.kappa, S.gamma, seed);
+        sprintf(iiiii,"bonds.dump");
         FILE *bonds;
         bonds = fopen(iiiii, "w");
         fclose(bonds);
 
         // energy changes etc in the system
-        sprintf(iiiii,"energy_N_%d_Sig_%f_kappa_%lf_gamma_%lf_seed_%d_.dump",N, 2*Coll.rad, S.kappa, S.gamma, seed);
+        sprintf(iiiii,"energy.dump");
         FILE *energyfile;
         energyfile = fopen(iiiii, "w");
         fclose(energyfile);
+
+        // position pulling bead
+        sprintf(iiiii,"position_pulling_bead.dat");
+        FILE *pullingbeadfile;
+        pullingbeadfile = fopen(iiiii, "w");
+        fclose(pullingbeadfile);
 
     }
 
