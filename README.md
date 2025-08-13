@@ -1,6 +1,6 @@
 # A guide to modeling mesoscale membrane deformations with coarse-grained computer simulations
 
-This repository contains ready-to-run tutorials on the simulation tests presented in the membrane review by M. Muñoz-Basagoiti, F. Frey,  B. Meadowcroft, M. Amaral, A. Prada, and A. Saric[^RevCit] ([2502.09798](https://arxiv.org/abs/2502.09798); accepted in Soft Matter).
+This repository contains ready-to-run tutorials on the simulation tests presented in the membrane review by M. Muñoz-Basagoiti, F. Frey,  B. Meadowcroft, M. Amaral, A. Prada, and A. Saric[^RevCit] ([2502.09798](https://arxiv.org/abs/2502.09798); Soft Matter, 2025).
 
 ## Table of contents
 1. [Tutorials](#tutorials)
